@@ -3,58 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Quote Generator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      text-align: center;
-    }
-    #quoteDisplay {
-      margin: 20px 0;
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1.2rem;
-      font-style: italic;
-    }
-    .form-section {
-      margin-top: 20px;
-    }
-    input {
-      margin: 5px;
-      padding: 8px;
-      border: 1px solid #aaa;
-      border-radius: 5px;
-    }
-    button {
-      padding: 8px 15px;
-      margin: 5px;
-      cursor: pointer;
-      border: none;
-      border-radius: 5px;
-      background-color: #007bff;
-      color: white;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <title>Random Quote Generator</title>
 </head>
 <body>
-  <h1>Dynamic Quote Generator</h1>
+  <h1>Random Quote Generator</h1>
 
-  <!-- Quote Display -->
-  <div id="quoteDisplay">Click "Show New Quote" to see one!</div>
-  <button id="newQuote">Show New Quote</button>
+  <!-- Where the random quote will be displayed -->
+  <div id="quoteDisplay"></div>
 
-  <!-- Add New Quote Form -->
-  <div class="form-section">
-    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-    <button id="addQuoteBtn">Add Quote</button>
-  </div>
+  <!-- Button to show a new random quote -->
+  <button id="newQuoteBtn">Show New Quote</button>
+
+  <!-- Input to add a new quote -->
+  <input type="text" id="newQuoteInput" placeholder="Enter a new quote">
+  <button id="addQuoteBtn">Add Quote</button>
 
   <script src="script.js"></script>
+  <script>
+    // Hook up the addQuote button to the addQuote() function
+    document.getElementById("addQuoteBtn").addEventListener("click", function() {
+      let newQuote = document.getElementById("newQuoteInput").value;
+      addQuote(newQuote);
+      document.getElementById("newQuoteInput").value = ""; // clear input
+    });
+  </script>
 </body>
 </html>
