@@ -3,29 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Random Quote Generator</title>
+  <title>Dynamic Quote Generator</title>
 </head>
 <body>
-  <h1>Random Quote Generator</h1>
-
-  <!-- Where the random quote will be displayed -->
+  <h1>Dynamic Quote Generator</h1>
   <div id="quoteDisplay"></div>
+  <button id="newQuote">Show New Quote</button>
 
-  <!-- Button to show a new random quote -->
-  <button id="newQuoteBtn">Show New Quote</button>
-
-  <!-- Input to add a new quote -->
-  <input type="text" id="newQuoteInput" placeholder="Enter a new quote">
-  <button id="addQuoteBtn">Add Quote</button>
+  <div>
+    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+    <button id="addQuoteBtn">Add Quote</button>
+  </div>
 
   <script src="script.js"></script>
-  <script>
-    // Hook up the addQuote button to the addQuote() function
-    document.getElementById("addQuoteBtn").addEventListener("click", function() {
-      let newQuote = document.getElementById("newQuoteInput").value;
-      addQuote(newQuote);
-      document.getElementById("newQuoteInput").value = ""; // clear input
-    });
-  </script>
 </body>
 </html>
