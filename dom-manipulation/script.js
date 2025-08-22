@@ -1,85 +1,84 @@
-// Ensure everything runs after the DOM is ready
-document.addEventListener('DOMContentLoaded', function () {
-  // 1) Quotes array with objects containing text and category
-  const quotes = [
-    { text: "The best way to predict the future is to create it.", category: "Inspiration" },
-    { text: "It always seems impossible until it's done.", category: "Motivation" },
-    { text: "Failure is simply the opportunity to begin again.", category: "Resilience" },
-    { text: "Do one thing every day that scares you.", category: "Growth" }
-  ];
+// Load quotes from localStorage or start fresh
+let quotes = JSON.parse(localStorage.getItem("quotes")) || [
+  { text: "The best way to get started is to quit talking and begin doing.", category: "Motivation" },
+  { text: "Don’t let yesterday take up too much of today.", category: "Wisdom" },
+  { text: "It’s not whether you get knocked down, it’s whether you get up.", category: "Resilience" }
+];
 
-  // Cache key DOM nodes
-  const quoteDisplay = document.getElementById('quoteDisplay');
-  const showNewQuoteBtn = document.getElementById('newQuote');
+// Function to display a random quote
+function displayRandomQuote() {
+  let randomIndex = Math.floor(Math.random() * quotes.length);
+  let quote = quotes[randomIndex];
+  document.getElementById("quoteDisplay").innerHTML = `"${quote.text}" - <em>${quote.category}</em>`;
 
-  // 2) Function to display a random quote and update the DOM with innerHTML
-  function showRandomQuote() {
-    if (quotes.length === 0) {
-      quoteDisplay.innerHTML = "No quotes available. Add one below!";
-      return;
-    }
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    const q = quotes[randomIndex];
-    quoteDisplay.innerHTML = `"${q.text}"<br><em>- ${q.category}</em>`;
-  }
+  // Save last shown quote in sessionStorage
+  sessionStorage.setItem("lastQuote", JSON.stringify(quote));
+}
 
-  // 3) Function to add a new quote to the array and update the DOM
-  function addQuote() {
-    const textInput = document.getElementById('newQuoteText');
-    const categoryInput = document.getElementById('newQuoteCategory');
+// Function to add a new quote
+function addQuote() {
+  let text = document.getElementById("quoteText").value.trim();
+  let category = document.getElementById("quoteCategory").value.trim();
 
-    const text = (textInput?.value || "").trim();
-    const category = (categoryInput?.value || "").trim();
+  if (text && category) {
+    let newQuote = { text, category };
+    quotes.push(newQuote);
 
-    if (!text || !category) {
-      alert("Please enter both a quote and a category.");
-      return;
-    }
+    // Save to localStorage
+    localStorage.setItem("quotes", JSON.stringify(quotes));
 
-    quotes.push({ text, category });
-
-    // Update the display to show the newly added quote
-    quoteDisplay.innerHTML = `"${text}"<br><em>- ${category}</em>`;
-
+    // Update DOM
+    document.getElementById("quoteDisplay").innerHTML = `"${newQuote.text}" - <em>${newQuote.category}</em>`;
+    
     // Clear inputs
-    textInput.value = "";
-    categoryInput.value = "";
+    document.getElementById("quoteText").value = "";
+    document.getElementById("quoteCategory").value = "";
   }
+}
 
-  // 4) Function to dynamically create the form UI (matches task requirement)
-  function createAddQuoteForm() {
-    const container = document.createElement('div');
-
-    const quoteInput = document.createElement('input');
-    quoteInput.type = 'text';
-    quoteInput.id = 'newQuoteText';
-    quoteInput.placeholder = 'Enter a new quote';
-
-    const categoryInput = document.createElement('input');
-    categoryInput.type = 'text';
-    categoryInput.id = 'newQuoteCategory';
-    categoryInput.placeholder = 'Enter quote category';
-
-    const addBtn = document.createElement('button');
-    addBtn.textContent = 'Add Quote';
-    // The task snippet uses inline onclick, so set it explicitly:
-    addBtn.setAttribute('onclick', 'addQuote()');
-
-    container.appendChild(quoteInput);
-    container.appendChild(categoryInput);
-    container.appendChild(addBtn);
-
-    // Append just after the Show New Quote button
-    showNewQuoteBtn.insertAdjacentElement('afterend', container);
-  }
-
-  // 5) Event listener on the “Show New Quote” button
-  showNewQuoteBtn.addEventListener('click', showRandomQuote);
-
-  // 6) Expose addQuote globally so the inline onclick works
-  window.addQuote = addQuote;
-
-  // 7) Build the dynamic form and show an initial quote
-  createAddQuoteForm();
-  showRandomQuote();
+// Export quotes as JSON
+document.getElementById("exportQuotes").addEventListener("click", function () {
+  let blob = new Blob([JSON.stringify(quotes, null, 2)], { type: "application/json" });
+  let url = URL.createObjectURL(blob);
+  let a = document.createElement("a");
+  a.href = url;
+  a.download = "quotes.json";
+  a.click();
+  URL.revokeObjectURL(url);
 });
+
+// Import quotes from JSON
+document.getElementById("importQuotes").addEventListener("change", function (event) {
+  let file = event.target.files[0];
+  if (file) {
+    let reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        let importedQuotes = JSON.parse(e.target.result);
+        if (Array.isArray(importedQuotes)) {
+          quotes = quotes.concat(importedQuotes);
+          localStorage.setItem("quotes", JSON.stringify(quotes));
+          alert("Quotes imported successfully!");
+        }
+      } catch {
+        alert("Invalid JSON file.");
+      }
+    };
+    reader.readAsText(file);
+  }
+});
+
+// Event listeners
+document.getElementById("newQuote").addEventListener("click", displayRandomQuote);
+document.getElementById("addQuote").addEventListener("click", addQuote);
+
+// Show last quote from sessionStorage or a random one on load
+window.onload = function () {
+  let lastQuote = sessionStorage.getItem("lastQuote");
+  if (lastQuote) {
+    let quote = JSON.parse(lastQuote);
+    document.getElementById("quoteDisplay").innerHTML = `"${quote.text}" - <em>${quote.category}</em>`;
+  } else {
+    displayRandomQuote();
+  }
+};
