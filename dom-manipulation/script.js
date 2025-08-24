@@ -331,6 +331,10 @@ async function syncQuotes() {
   } else {
     showNotification('Sync complete — no changes', 'info');
   }
+
+  // ← **ADDED ALERT LINE** (this is the only change)
+  alert("Quotes synced with server!");
+
   setLastSyncTextLocal();
 }
 
