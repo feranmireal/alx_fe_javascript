@@ -4,32 +4,66 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dynamic Quote Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { margin-bottom: 10px; }
+    #quoteDisplay { 
+      border: 1px solid #ccc; border-radius: 8px; 
+      padding: 16px; min-height: 48px; margin: 10px 0 16px;
+      font-size: 1.1rem;
+    }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .row > * { margin: 4px 0; }
+    #notifications { margin-top: 10px; font-weight: bold; color: #b22222; }
+    #quoteList { margin-top: 16px; padding-left: 18px; }
+    label { font-weight: 600; }
+    input, select, button { padding: 8px; font-size: 14px; }
+    button { cursor: pointer; }
+    .small { font-size: 12px; color: #555; }
+  </style>
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
 
-  <!-- Random Quote Display -->
-  <div id="quoteDisplay"></div>
-  <button id="newQuote">Show New Quote</button>
+  <!-- Current quote display -->
+  <div id="quoteDisplay">Click “Show New Quote” to begin.</div>
 
-  <hr>
+  <!-- Controls row -->
+  <div class="row">
+    <button id="newQuote">Show New Quote</button>
 
-  <!-- Category Filter -->
-  <label for="categoryFilter">Filter by Category:</label>
-  <!-- per task spec: onchange calls filterQuotes() -->
-  <select id="categoryFilter" onchange="filterQuotes()">
-    <option value="all">All Categories</option>
-    <!-- Populated dynamically -->
-  </select>
+    <label for="categoryFilter">Filter by category:</label>
+    <!-- Inline onchange required by the task spec -->
+    <select id="categoryFilter" onchange="filterQuotes()">
+      <option value="all">All Categories</option>
+      <!-- dynamically populated -->
+    </select>
 
-  <!-- Add Quote Form -->
-  <h2>Add a New Quote</h2>
-  <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-  <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-  <button id="addQuoteBtn">Add Quote</button>
+    <button id="manualSyncBtn" title="Sync with server now">🔄 Sync</button>
+  </div>
 
-  <!-- Filtered Quote List -->
-  <div id="quoteList"></div>
+  <!-- Add quote -->
+  <h3>Add a New Quote</h3>
+  <div class="row">
+    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+    <button id="addQuoteBtn">Add Quote</button>
+  </div>
+
+  <!-- Import / Export -->
+  <h3>Import / Export</h3>
+  <div class="row">
+    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+    <button id="exportBtn">Export Quotes (JSON)</button>
+    <span class="small" id="lastViewedNote"></span>
+  </div>
+
+  <!-- Notifications -->
+  <div id="notifications"></div>
+
+  <!-- List of quotes (filtered) -->
+  <h3>Quotes</h3>
+  <ul id="quoteList"></ul>
 
   <script src="script.js"></script>
 </body>
