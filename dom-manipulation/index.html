@@ -8,26 +8,28 @@
 <body>
   <h1>Dynamic Quote Generator</h1>
 
-  <!-- Category Filter (exact id and onchange signature for the checker) -->
-  <label for="categoryFilter">Filter by category:</label>
-  <select id="categoryFilter" onchange="filterQuotes()">
-    <option value="all">All Categories</option>
-    <!-- Dynamically populated categories -->
-  </select>
-
-  <!-- Where quotes are rendered -->
+  <!-- Random Quote Display -->
   <div id="quoteDisplay"></div>
-
-  <!-- Show new (random) quote -->
   <button id="newQuote">Show New Quote</button>
 
-  <hr />
+  <hr>
 
-  <!-- Add new quote UI (matches prior task style) -->
+  <!-- Category Filter -->
+  <label for="categoryFilter">Filter by Category:</label>
+  <!-- per task spec: onchange calls filterQuotes() -->
+  <select id="categoryFilter" onchange="filterQuotes()">
+    <option value="all">All Categories</option>
+    <!-- Populated dynamically -->
+  </select>
+
+  <!-- Add Quote Form -->
   <h2>Add a New Quote</h2>
   <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
   <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-  <button onclick="addQuote()">Add Quote</button>
+  <button id="addQuoteBtn">Add Quote</button>
+
+  <!-- Filtered Quote List -->
+  <div id="quoteList"></div>
 
   <script src="script.js"></script>
 </body>
