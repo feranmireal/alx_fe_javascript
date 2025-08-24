@@ -1,69 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dynamic Quote Generator</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1 { margin-bottom: 10px; }
-    #quoteDisplay { 
-      border: 1px solid #ccc; border-radius: 8px; 
-      padding: 16px; min-height: 48px; margin: 10px 0 16px;
-      font-size: 1.1rem;
-    }
-    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    .row > * { margin: 4px 0; }
-    #notifications { margin-top: 10px; font-weight: bold; color: #b22222; }
-    #quoteList { margin-top: 16px; padding-left: 18px; }
-    label { font-weight: 600; }
-    input, select, button { padding: 8px; font-size: 14px; }
-    button { cursor: pointer; }
-    .small { font-size: 12px; color: #555; }
+    body { font-family: Arial, sans-serif; margin: 18px; }
+    .controls { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
+    #quoteDisplay { border:1px solid #ddd; padding:12px; min-height:60px; border-radius:6px; margin-bottom:12px; }
+    #notification { margin:8px 0; min-height:20px; color:#0a0; }
+    #quotesList li { margin:6px 0; }
+    .muted { color:#666; font-size:12px; }
+    .notice.hidden { display:none; }
+    .notice.info { color: #1a73e8; }
+    .notice.success { color: #0a7a07; }
+    .notice.error { color: #b22222; }
   </style>
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
 
-  <!-- Current quote display -->
-  <div id="quoteDisplay">Click “Show New Quote” to begin.</div>
+  <div id="notification" class="notice hidden"></div>
+  <div id="lastSync" class="muted"></div>
 
-  <!-- Controls row -->
-  <div class="row">
-    <button id="newQuote">Show New Quote</button>
-
-    <label for="categoryFilter">Filter by category:</label>
-    <!-- Inline onchange required by the task spec -->
+  <div class="controls">
+    <label for="categoryFilter">Category:</label>
     <select id="categoryFilter" onchange="filterQuotes()">
       <option value="all">All Categories</option>
-      <!-- dynamically populated -->
     </select>
 
-    <button id="manualSyncBtn" title="Sync with server now">🔄 Sync</button>
+    <button id="showRandomBtn">Show New Quote</button>
+    <button id="syncNowBtn">Sync Now</button>
+    <button id="exportBtn">Export JSON</button>
+    <label style="display:inline-flex;align-items:center;gap:6px;">
+      Import JSON
+      <input id="importFile" type="file" accept=".json" />
+    </label>
   </div>
 
-  <!-- Add quote -->
-  <h3>Add a New Quote</h3>
-  <div class="row">
-    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+  <div id="quoteDisplay">Click "Show New Quote" or add one below.</div>
+
+  <h3>Add a Quote</h3>
+  <div class="controls">
+    <input id="newQuoteText" type="text" placeholder="Quote text" style="width:45%" />
+    <input id="newQuoteCategory" type="text" placeholder="Category (e.g. Motivation)" style="width:25%" />
     <button id="addQuoteBtn">Add Quote</button>
   </div>
 
-  <!-- Import / Export -->
-  <h3>Import / Export</h3>
-  <div class="row">
-    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
-    <button id="exportBtn">Export Quotes (JSON)</button>
-    <span class="small" id="lastViewedNote"></span>
-  </div>
-
-  <!-- Notifications -->
-  <div id="notifications"></div>
-
-  <!-- List of quotes (filtered) -->
-  <h3>Quotes</h3>
-  <ul id="quoteList"></ul>
+  <h3>Quotes (filtered)</h3>
+  <ul id="quotesList"></ul>
 
   <script src="script.js"></script>
 </body>
